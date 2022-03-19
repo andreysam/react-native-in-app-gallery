@@ -1,13 +1,13 @@
 import React, {useCallback, useMemo} from 'react';
-import ImagePicker, {ImagePickerOptions, ImagePickerResponse} from 'react-native-image-picker';
+import {ImageLibraryOptions, ImagePickerResponse, launchImageLibrary} from 'react-native-image-picker';
 import {Image, TouchableOpacity} from 'react-native';
 import {convertToImageFile} from './utils';
 import {ImageFile} from './typings';
 import {galleryButtonStyles} from "./styles";
 
 type Props = {
-  onImagePicked: (image: ImageFile) => void;
-  imagePickerOptions: ImagePickerOptions;
+  onImagePicked: (image: ImageFile | null) => void;
+  imagePickerOptions: ImageLibraryOptions;
 };
 
 const FloatFullGalleryButton: React.FC<Props> = ({
@@ -22,7 +22,7 @@ const FloatFullGalleryButton: React.FC<Props> = ({
   );
 
   const handleOnPress = useCallback(() => {
-    ImagePicker.launchImageLibrary(imagePickerOptions, callback);
+    launchImageLibrary(imagePickerOptions, callback);
   }, [imagePickerOptions, callback]);
 
   const source = useMemo(() => {
