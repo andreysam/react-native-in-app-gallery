@@ -15,7 +15,7 @@ import {CameraButton} from './CameraButton';
 import FloatFullGalleryButton from './GalleryButton';
 import {ImageFile} from './typings';
 import SelectableImage from './SelectableImage';
-import {ImagePickerOptions} from 'react-native-image-picker';
+import {CameraOptions, ImageLibraryOptions} from 'react-native-image-picker';
 import {inAppGalleryStyles} from "./styles";
 
 export interface Props {
@@ -33,12 +33,13 @@ export interface Props {
   onSelectionEnd?: (images: ImageFile[]) => void;
   cancelSelectionText?: string;
   doneSelectionText?: string;
-  imagePickerOptions?: ImagePickerOptions;
+  cameraOptions?: CameraOptions;
+  imageLibraryOptions?: ImageLibraryOptions;
   selectionColor?: string;
 }
 
 const handlePermissionRequest = (
-  result: 'unavailable' | 'denied' | 'blocked' | 'granted',
+  result: 'unavailable' | 'denied' | 'blocked' | 'granted' | 'limited',
   permission: Permission,
   onPermissionGranted?: (permission: Permission) => void,
   onPermissionDenied?: (permission: Permission) => void,
@@ -53,7 +54,8 @@ const handlePermissionRequest = (
       onPermissionDenied && onPermissionDenied(permission);
       break;
     case RESULTS.GRANTED:
-      console.log('The permission is granted');
+    case RESULTS.LIMITED:
+      console.log('The permission is granted / limited');
       onPermissionGranted && onPermissionGranted(permission);
       break;
     case RESULTS.BLOCKED:
@@ -69,12 +71,14 @@ const ANDROID_WITH_CAMERA_PERMISSIONS = [
 ];
 const IOS_WITH_CAMERA_PERMISSIONS = [PERMISSIONS.IOS.CAMERA];
 
-const defaultImagePickerOptions = {
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
-  quality: 0.8
+const defaultCameraOptions: CameraOptions = {
+  quality: 0.8,
+  mediaType: 'photo'
+};
+
+const defaultImageLibraryOptions: ImageLibraryOptions = {
+  quality: 0.8,
+  mediaType: 'photo'
 };
 
 const InAppGallery = forwardRef<any, Props>(
@@ -87,7 +91,8 @@ const InAppGallery = forwardRef<any, Props>(
       onPermissionDenied,
       onPermissionBlocked,
       enableSelection,
-      imagePickerOptions = defaultImagePickerOptions,
+      cameraOptions = defaultCameraOptions,
+      imageLibraryOptions = defaultImageLibraryOptions,
       imageHeight = 120,
       pageSize = 100,
       initialNumToRender = 9,
@@ -96,7 +101,7 @@ const InAppGallery = forwardRef<any, Props>(
       cancelSelectionText = 'Cancel',
       doneSelectionText = 'DONE',
       selectionColor = '#0284ff',
-    },
+    }: Props,
     ref,
   ) => {
     const [cameraGrants, setCameraGrants] = useState<number>(0);
@@ -298,7 +303,7 @@ const InAppGallery = forwardRef<any, Props>(
         if (withCamera) {
           if (index === 0) {
             if (isCameraGranted) {
-              return <CameraButton height={imageHeight} onImagePicked={onImagePicked} imagePickerOptions={imagePickerOptions} />;
+              return <CameraButton height={imageHeight} onImagePicked={onImagePicked} cameraOptions={cameraOptions} />;
             } else {
               return (
                 <TouchableOpacity
@@ -343,7 +348,7 @@ const InAppGallery = forwardRef<any, Props>(
         selectedPhotosMap,
         onImageSelected,
         askCameraPermissions,
-        imagePickerOptions,
+        cameraOptions,
       ],
     );
 
@@ -413,7 +418,7 @@ const InAppGallery = forwardRef<any, Props>(
         {withFullGallery && (
           <View
             style={inAppGalleryStyles.floatButtonContainer}>
-            <FloatFullGalleryButton onImagePicked={onImagePicked} imagePickerOptions={imagePickerOptions} />
+            <FloatFullGalleryButton onImagePicked={onImagePicked} imageLibraryOptions={imageLibraryOptions} />
           </View>
         )}
       </View>
