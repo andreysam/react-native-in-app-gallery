@@ -2,10 +2,9 @@
   "name": "react-native-in-app-gallery",
   "version": "0.0.7",
   "description": "A react-native in-app gallery component",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.ts",
   "files": [
-    "dist/"
+    "src/"
   ],
   "scripts": {
     "build": "tsc",
@@ -23,7 +22,7 @@
     "@react-native-community/cameraroll": "^2.0.0",
     "react-native-permissions": "^3.3.1",
     "react-native-camera": "^3.30.0",
-    "react-native-image-picker": "^2.3.1"
+    "react-native-image-picker": "^4.7.3"
   },
   "devDependencies": {
     "@types/react-native": "^0.62.0",
