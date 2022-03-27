@@ -1,7 +1,8 @@
 import React, {useMemo} from 'react';
 import {PhotoIdentifier} from '@react-native-community/cameraroll';
-import {Image, TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity, View} from 'react-native';
 import {inAppGalleryStyles, selectableImageStyles} from "./styles";
+import FastImage from 'react-native-fast-image';
 
 type Props = {
   imageHeight: number;
@@ -46,14 +47,14 @@ const SelectableImage: React.FC<Props> = ({
       style={touchableStyle}>
       {isSelected ? (
         <View style={inAppGalleryStyles.relative}>
-          <Image style={selectableImageStyles.image} source={source} />
-          <Image
+          <FastImage style={selectableImageStyles.image} source={source} />
+          <FastImage
             source={checkSource}
             style={checkStyle}
           />
         </View>
       ) : (
-        <Image style={selectableImageStyles.image} source={source} />
+        <FastImage style={selectableImageStyles.image} source={source} />
       )}
     </TouchableOpacity>
   );
